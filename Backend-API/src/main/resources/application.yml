@@ -34,5 +34,12 @@ springdoc:
     operations-sorter: alpha
     tags-sorter: alpha
 
+aws:
+  s3:
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
+    region: ${AWS_REGION}
+    bucket-name: ${AWS_BUCKET_NAME}
+
 deployment:
   url: ${DEPLOYMENT_URL:http://localhost:8080}
