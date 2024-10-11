@@ -2,6 +2,7 @@ package com.avangers.backendapi.services;
 
 import com.avangers.backendapi.DTOs.*;
 import com.avangers.backendapi.models.Admin;
+import com.avangers.backendapi.models.User;
 import com.avangers.backendapi.repositories.AdminRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class AdminServiceImpl implements AdminService {
                 .password(passwordEncoder.encode(registerUserRequestDTO.password()))
                 .build();
         adminRepository.save(newAdmin);
-        return new RegisterUserResponseDTO();
+        return new RegisterUserResponseDTO(newAdmin.getId(), newAdmin.getEmail(), false);
     }
 
     // Transactional annotation is used to make sure that the method is executed
@@ -47,7 +48,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public DeleteUserResponseDTO deleteAdmin(String email) {
         adminRepository.deleteByEmail(email);
-        return DeleteUserResponseDTO.builder().response("User was successfully deleted").build();
+        return new DeleteUserResponseDTO("User was successfully deleted");
     }
 
     @Override
@@ -72,9 +73,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public LoginUserResponseDTO loginAdmin(LoginUserRequestDTO loginUserRequestDTO) {
-        Admin admin = adminRepository.findByEmail(loginUserRequestDTO.getEmail())
+        Admin admin = adminRepository.findByEmail(loginUserRequestDTO.email())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        if (!passwordEncoder.matches(loginUserRequestDTO.getPassword(), admin.getPassword())) {
+        if (!passwordEncoder.matches(loginUserRequestDTO.password(), admin.getPassword())) {
             throw new RuntimeException("Password is not valid");
         }
         return new LoginUserResponseDTO(jwtTokenService.generateToken(admin));

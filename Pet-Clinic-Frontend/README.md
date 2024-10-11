@@ -17,12 +17,12 @@ If you are developing a production application, we recommend updating the config
 export default {
   // other rules...
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
+    ecmaVersion: "latest",
+    sourceType: "module",
+    project: ["./tsconfig.json", "./tsconfig.node.json"],
     tsconfigRootDir: __dirname,
   },
-}
+};
 ```
 
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
@@ -32,6 +32,7 @@ export default {
 ## How to start frontend
 
 in terminal
+
 ```
 - cd Pet-Clinic-Frontend
 - npm install
@@ -41,3 +42,9 @@ in terminal
 ## Regular expression (regex)
 
 It is use for validation strings (use for validation email adress) good example for practise (https://regexr.com)
+
+## Run the biome to format code
+
+```
+npm run check:write
+```

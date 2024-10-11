@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS clinics (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    street VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    zipcode VARCHAR(20) NOT NULL,
+    longitude DOUBLE PRECISION NOT NULL,
+    latitude DOUBLE PRECISION NOT NULL,
+    description TEXT,
+    vet_id BIGINT NOT NULL,
+    CONSTRAINT fk_vet FOREIGN KEY (vet_id) REFERENCES vets(id) ON DELETE CASCADE
+);

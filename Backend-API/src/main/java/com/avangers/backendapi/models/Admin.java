@@ -1,6 +1,5 @@
 package com.avangers.backendapi.models;
 
-
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.Entity;

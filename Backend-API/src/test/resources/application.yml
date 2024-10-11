@@ -7,7 +7,20 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "not_valid_username"
+    password: "not_valid_password"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    default-encoding: UTF-8
+    test-connection: false  # Set to false (default) to not test the connection at startup
 
 cors:
   urls: ${CORS_URLS:http://localhost:3000,http://localhost:5173}
@@ -21,3 +34,6 @@ springdoc:
   swagger-ui:
     operations-sorter: alpha
     tags-sorter: alpha
+
+deployment:
+  url: ${DEPLOYMENT_URL:http://localhost:8080}

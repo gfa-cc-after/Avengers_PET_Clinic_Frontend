@@ -1,4 +1,4 @@
 package com.avangers.backendapi.DTOs;
 
-public record AddPetResponseDTO () {
-}
+public record AddPetResponseDTO ( Long id) 
+{}

@@ -28,7 +28,7 @@ public class PetController {
     public ResponseEntity<?> getMyPets(Principal principal) {
         try {
             FindUserResponseDTO user = customerService.findCustomerByEmail(principal.getName());
-            List<PetDTO> pets = petService.getPetsByOwnerId(Long.valueOf(user.getId()));
+            List<PetDTO> pets = petService.getPetsByOwnerId(Long.valueOf(user.id()));
             return new ResponseEntity<>(pets, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             HashMap<String, String> error = new HashMap<>();

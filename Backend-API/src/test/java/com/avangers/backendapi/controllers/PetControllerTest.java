@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser(username = "user@example.com")  // Adds a mock user automatically
+@WithMockUser(username = "user@example.com") // Adds a mock user automatically
 public class PetControllerTest {
 
     @Autowired
@@ -54,13 +54,14 @@ public class PetControllerTest {
     @Test
     public void testGetMyPets() throws Exception {
         // Mocking data using DTO
-        FindUserResponseDTO userDTO = new FindUserResponseDTO(1, "user@example.com");
+        FindUserResponseDTO userDTO = new FindUserResponseDTO(1L, "user@example.com");
         when(customerService.findCustomerByEmail(anyString())).thenReturn(userDTO);
 
         // Using PetDTO for mock return value
-        PetDTO mockPetDTO = new PetDTO();
-        mockPetDTO.setName("hauko");
-        mockPetDTO.setType("hauky");
+        PetDTO mockPetDTO = new PetDTO(
+                1L,
+                "hauko",
+                "hauky");
 
         List<PetDTO> petsDTOs = Collections.singletonList(mockPetDTO);
         when(petService.getPetsByOwnerId(1L)).thenReturn(petsDTOs);
@@ -76,14 +77,14 @@ public class PetControllerTest {
     void testAddPetSuccessfully() throws Exception {
         String email = "user@example.com";
         AddPetRequestDTO requestDTO = new AddPetRequestDTO("Lucky", "Dog");
-        AddPetResponseDTO responseDTO = new AddPetResponseDTO();
+        AddPetResponseDTO responseDTO = new AddPetResponseDTO(1L);
 
         when(petService.addPet(any(AddPetRequestDTO.class), eq(email))).thenReturn(responseDTO);
 
         mockMvc.perform(post("/api/pets/add")
-//                        .principal(() -> email) // Simulating the Principal with email
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO)))
+                // .principal(() -> email) // Simulating the Principal with email
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
 

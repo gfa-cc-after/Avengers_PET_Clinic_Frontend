@@ -14,3 +14,4 @@ public interface AdminService extends UserDetailsService {
 
     FindUserResponseDTO findAdminByEmail(String email);
 }
+

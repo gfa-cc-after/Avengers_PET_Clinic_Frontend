@@ -45,9 +45,10 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.postgresql:postgresql:42.7.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
     implementation 'jakarta.mail:jakarta.mail-api:2.0.1'
     implementation 'software.amazon.awssdk:s3:2.20.6'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

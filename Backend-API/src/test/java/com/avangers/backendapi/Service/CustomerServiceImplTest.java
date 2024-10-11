@@ -42,7 +42,8 @@ public class CustomerServiceImplTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
         assertThrows(UsernameNotFoundException.class, () -> {
-            userServiceImpl.updateCustomer("old@asdad.cy", new UpdateUserRequestDTO("newemail@email.com", "NewPassword123"));
+            userServiceImpl.updateCustomer("old@asdad.cy",
+                    new UpdateUserRequestDTO("newemail@email.com", "NewPassword123"));
         });
     }
 
@@ -56,7 +57,8 @@ public class CustomerServiceImplTest {
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(passwordEncoder.encode("NewPassword123")).thenReturn("encodedPassword");
 
-        UpdateUserResponseDTO result = userServiceImpl.updateCustomer("oldeamil@eamil.com", new UpdateUserRequestDTO("newemail@eamil.com", "NewPassword123"));
+        UpdateUserResponseDTO result = userServiceImpl.updateCustomer("oldeamil@eamil.com",
+                new UpdateUserRequestDTO("newemail@eamil.com", "NewPassword123"));
 
         assertEquals("Update was successful", result.message());
     }

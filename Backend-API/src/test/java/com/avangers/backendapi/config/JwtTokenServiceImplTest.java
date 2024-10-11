@@ -44,7 +44,7 @@ class JwtTokenServiceImplTest {
 
         Customer user = Customer
                 .builder()
-                .id(1)
+                .id(1L)
                 .email("john.doe@gmail.com")
                 .password(passwordEncoder.encode("password"))
                 .build();

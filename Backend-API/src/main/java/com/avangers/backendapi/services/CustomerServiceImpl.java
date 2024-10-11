@@ -1,6 +1,7 @@
 package com.avangers.backendapi.services;
 
 import com.avangers.backendapi.DTOs.*;
+import com.avangers.backendapi.models.Admin;
 import com.avangers.backendapi.models.Customer;
 import com.avangers.backendapi.models.User;
 import com.avangers.backendapi.repositories.CustomerRepository;
@@ -35,13 +36,13 @@ public class CustomerServiceImpl implements CustomerService {
                 .password(passwordEncoder.encode(registerUserRequestDTO.password()))
                 .build();
         customerRepository.save(newCustomer);
-        return new RegisterUserResponseDTO();
+        return new RegisterUserResponseDTO(newCustomer.getId(), newCustomer.getEmail(), false);
     }
 
     @Override
     public DeleteUserResponseDTO deleteCustomer(String email) {
         customerRepository.deleteByEmail(email);
-        return DeleteUserResponseDTO.builder().response("User was successfully deleted").build();
+        return new DeleteUserResponseDTO("User was successfully deleted");
     }
 
     @Override
@@ -66,9 +67,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public LoginUserResponseDTO loginCustomer(LoginUserRequestDTO loginUserRequestDTO) {
-        User user = customerRepository.findByEmail(loginUserRequestDTO.getEmail())
+        User user = customerRepository.findByEmail(loginUserRequestDTO.email())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        if (!passwordEncoder.matches(loginUserRequestDTO.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(loginUserRequestDTO.password(), user.getPassword())) {
             throw new RuntimeException("Password is not valid");
         }
         return new LoginUserResponseDTO(jwtTokenService.generateToken(user));

@@ -1,14 +1,7 @@
 package com.avangers.backendapi.DTOs;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public record FindUserResponseDTO(
+        Long id,
+        String email) {
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-
-public class FindUserResponseDTO {
-    private Integer id;
-    private String email;
 }

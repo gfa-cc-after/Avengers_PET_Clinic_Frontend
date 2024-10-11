@@ -9,9 +9,9 @@ export type PetProperties = {
 const Pet = ({ id, name, type }: PetProperties) => {
   return (
     <Fragment key={id}>
-      <li key={id}>
+      <ul key={id}>
         {name} {type}
-      </li>
+      </ul>
     </Fragment>
   )
 }

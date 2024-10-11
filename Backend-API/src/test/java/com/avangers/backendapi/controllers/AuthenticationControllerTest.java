@@ -1,6 +1,5 @@
 package com.avangers.backendapi.controllers;
 
-
 import com.avangers.backendapi.DTOs.LoginUserRequestDTO;
 import com.avangers.backendapi.DTOs.LoginUserResponseDTO;
 import com.avangers.backendapi.DTOs.RegisterUserRequestDTO;
@@ -41,7 +40,6 @@ public class AuthenticationControllerTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @DisplayName("Should login and get a valid JWT token")
     @Test
     public void shouldLoginAndGetToken() throws Exception {
@@ -55,10 +53,9 @@ public class AuthenticationControllerTest {
         foundUser.setPassword(passwordEncoder.encode(password));
         when(customerRepository.findByEmail(anyString())).thenReturn(Optional.of(foundUser));
 
-
-        LoginUserRequestDTO loginUserRequestDTO = new LoginUserRequestDTO();
-        loginUserRequestDTO.setEmail(email);
-        loginUserRequestDTO.setPassword(password);
+        LoginUserRequestDTO loginUserRequestDTO = new LoginUserRequestDTO(
+                email,
+                password);
 
         // When
 
@@ -73,12 +70,10 @@ public class AuthenticationControllerTest {
                 LoginUserResponseDTO.class);
         // @formatter:on
 
-
         // Then
         Assertions.assertEquals(200, loginResponse.getResponse().getStatus());
         Assertions.assertEquals(responseDTO.token().split("\\.").length, 3);
     }
-
 
     @DisplayName("Should login and get a valid JWT token and use that token to delete self")
     @Test
@@ -93,11 +88,9 @@ public class AuthenticationControllerTest {
         foundUser.setPassword(passwordEncoder.encode(password));
         when(customerRepository.findByEmail(anyString())).thenReturn(Optional.of(foundUser));
 
-
-        LoginUserRequestDTO loginUserRequestDTO = new LoginUserRequestDTO();
-        loginUserRequestDTO.setEmail(email);
-        loginUserRequestDTO.setPassword(password);
-
+        LoginUserRequestDTO loginUserRequestDTO = new LoginUserRequestDTO(
+                email,
+                password);
 
         // @formatter:off
         MvcResult loginResponse =  mockMvc.perform(post("/login")
@@ -111,8 +104,7 @@ public class AuthenticationControllerTest {
         // @formatter:on
 
         mockMvc.perform(delete("/delete")
-                        .header("Authorization", "Bearer " + responseDTO.token())
-                )
+                .header("Authorization", "Bearer " + responseDTO.token()))
                 .andExpect(status().is2xxSuccessful());
 
     }
@@ -124,15 +116,13 @@ public class AuthenticationControllerTest {
         RegisterUserRequestDTO registerUserRequestDTO = new RegisterUserRequestDTO("john.doe@gmail.com", "");
         String httpBody = objectMapper.writeValueAsString(registerUserRequestDTO);
         mockMvc.perform(post("/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(httpBody)
-                )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(httpBody))
                 .andExpectAll(
                         status().is4xxClientError(),
                         jsonPath("$.errors").value(containsInAnyOrder(
-                        "password should have at least 6 characters",
+                                "password should have at least 6 characters",
                                 "password is required",
-                                "password should contain at least one uppercase and one lowercase letter"))
-                );
+                                "password should contain at least one uppercase and one lowercase letter")));
     }
 }

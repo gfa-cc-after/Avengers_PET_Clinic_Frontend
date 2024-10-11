@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface VetRepository extends JpaRepository<Vet, Long> {
     boolean existsByEmail(String email);
+
     Optional<Vet> findByEmail(String email);
+
     void deleteByEmail(String email);
 }

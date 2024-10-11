@@ -1,15 +1,21 @@
 import { type Dispatch, type SetStateAction, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../pages/AuthContext"
+import type { PetProperties } from "./PetsList"
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"
 
 type Props = {
   setRenderForm: (value: boolean) => void
   setParentError: Dispatch<SetStateAction<string | null>>
+  setPets: React.Dispatch<React.SetStateAction<PetProperties[]>>
 }
 
-export const AddNewPetForm = ({ setRenderForm, setParentError }: Props) => {
+export const AddNewPetForm = ({
+  setRenderForm,
+  setParentError,
+  setPets,
+}: Props) => {
   const [name, setName] = useState("")
   const [type, setType] = useState("")
   const navigate = useNavigate()
@@ -25,9 +31,12 @@ export const AddNewPetForm = ({ setRenderForm, setParentError }: Props) => {
         },
         body: JSON.stringify({ name, type }),
       })
+      const responseBody = await response.json()
       if (!response.status.toString().startsWith("2")) {
         setParentError("Invalid name or type")
       } else {
+        const newPet: PetProperties = { name, type, id: responseBody.id }
+        setPets((previousPets) => [...previousPets, newPet])
         navigate("/pets")
       }
     } catch (error) {
